@@ -1,18 +1,19 @@
 if __FILE__ == $PROGRAM_NAME
 	puts "when in app.rb, it returns #{__FILE__} and #{$PROGRAM_NAME}"
 	# make a hash of words
-	word_hash = {}
-	sowpods = File.open('sowpods.txt', 'r')
-	sowpods.each do |line|
-		word_hash[line.chomp.downcase] = true
+	@word_hash = {}
+	dictionary = File.open('1000_families.txt', 'r')
+	dictionary.each do |word|
+		word = word.strip.downcase
+		@word_hash[word] = true
 	end
-	sowpods.close
+	dictionary.close
 
 	# create a list of long words to choose
 	# a game word from!
 	long_word_list = []
-	word_hash.select do |k, v|
-		if k.length > 8
+	@word_hash.select do |k, v|
+		if k.length > 7
 			long_word_list.push(k)
 		end
 	end
@@ -64,8 +65,8 @@ end
 # if the player_word returned true for all three rules,
 # add it to an array of the player's guesses
 # and return true
+@valid_guesses = []
 def is_valid_guess?(player_word)
-	@valid_guesses = []
 	@valid_guesses.push(player_word)
 	return true
 end
@@ -80,24 +81,35 @@ def already_guessed?(player_word)
 end
 
 # creates a list of all possible anagrams in game_word
-official_guess_list = []
-word_hash.each_key do |k|
-	k = k.split("").sort
-	if rule1(k, game_word) && rule2(k, game_word) && rule3(k)
-		official_guess_list.push(k)
+def all_possible_anagrams_of_game_word(game_word)
+	@official_guess_list = []
+	@word_hash.each_key do |k|
+		word_split_and_sorted = k.split("").sort
+		if rule1(word_split_and_sorted, game_word) && rule2(word_split_and_sorted, game_word) \
+			&& rule3(word_split_and_sorted)
+			@official_guess_list.push(k)
+		end
 	end
 end
 
-# get player word, recombobulate it into a sorted string
-player_word = $stdin.gets.chomp
-player_word = player_word.split("").sort
-if rule1(player_word, game_word) && rule2(player_word, game_word) && rule3(player_word)
-	puts "Yay! Good word"
-	is_valid_guess?(player_word)
-else
-	puts "That is not a valid word. Whomp."
+# play the game
+all_possible_anagrams_of_game_word(game_word)
+puts @official_guess_list.length
+while @official_guess_list.length != @valid_guesses.length
+	# get player word, recombobulate it into a sorted string
+	player_word_string = $stdin.gets.chomp.downcase
+	player_word = player_word_string.split("").sort
+
+	if already_guessed?(player_word_string) == false
+		puts "You've already guessed that word!"	
+	elsif @official_guess_list.include?(player_word_string)
+		is_valid_guess?(player_word_string)
+		puts "woo that's an actual word on the list!"
+	else
+		puts "That is not a valid word. Keep trying ok!"
+	end
+	puts @valid_guesses.length
 end
-print @valid_guesses
 
 
 
