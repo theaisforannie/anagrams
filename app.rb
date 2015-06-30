@@ -66,11 +66,8 @@ end
 # and return true
 def is_valid_guess?(player_word)
 	@valid_guesses = []
-	if rule1 && rule2 && rule3
-		valid_guesses.push(player_word)
-		return true
-	else
-	end
+	@valid_guesses.push(player_word)
+	return true
 end
 
 # check if a word has already been guessed
@@ -94,7 +91,13 @@ end
 # get player word, recombobulate it into a sorted string
 player_word = $stdin.gets.chomp
 player_word = player_word.split("").sort
-
+if rule1(player_word, game_word) && rule2(player_word, game_word) && rule3(player_word)
+	puts "Yay! Good word"
+	is_valid_guess?(player_word)
+else
+	puts "That is not a valid word. Whomp."
+end
+print @valid_guesses
 
 
 
