@@ -21,7 +21,6 @@ if __FILE__ == $PROGRAM_NAME
 	puts game_word
 end
 
-
 # Rule 1: Every letter in player_word
 # appears in game_word
 def rule1(player_word, game_word)
@@ -61,6 +60,42 @@ def rule3(player_word)
 	end
 	return is_valid
 end
+
+# if the player_word returned true for all three rules,
+# add it to an array of the player's guesses
+# and return true
+def is_valid_guess?(player_word)
+	@valid_guesses = []
+	if rule1 && rule2 && rule3
+		valid_guesses.push(player_word)
+		return true
+	else
+	end
+end
+
+# check if a word has already been guessed
+def already_guessed?(player_word)
+	is_valid = true
+	if @valid_guesses.include?(player_word)
+		is_valid = false
+	end
+	return is_valid
+end
+
+# creates a list of all possible anagrams in game_word
+official_guess_list = []
+word_hash.each_key do |k|
+	k = k.split("").sort
+	if rule1(k, game_word) && rule2(k, game_word) && rule3(k)
+		official_guess_list.push(k)
+	end
+end
+
+# get player word, recombobulate it into a sorted string
+player_word = $stdin.gets.chomp
+player_word = player_word.split("").sort
+
+
 
 
 
