@@ -98,7 +98,7 @@ puts @official_guess_list.length
 puts "here is the official list"
 puts "-------------------------"
 print @official_guess_list
-puts "-------------------------"
+puts "\n-------------------------"
 
 while @official_guess_list.length != @valid_guesses.length
 	# get player word, recombobulate it into a sorted string
