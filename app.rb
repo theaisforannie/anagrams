@@ -95,6 +95,11 @@ end
 # play the game
 all_possible_anagrams_of_game_word(game_word)
 puts @official_guess_list.length
+puts "here is the official list"
+puts "-------------------------"
+print @official_guess_list
+puts "-------------------------"
+
 while @official_guess_list.length != @valid_guesses.length
 	# get player word, recombobulate it into a sorted string
 	player_word_string = $stdin.gets.chomp.downcase
